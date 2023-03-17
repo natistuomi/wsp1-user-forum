@@ -1,0 +1,34 @@
+{% extends "layout.njk" %}
+{% block  content %}
+    <ul>
+        <li class="post">
+            <h1>{{ post.title }}</h1>
+            <p>Author: {{ post.username }}</p>
+            <p>Published: {{ post.createdAt  }}</p>
+            <p>Content: {{ post.content  }}</p>
+            <p>{{ post.id }}</p>
+        </li>
+    </ul>
+
+    <br>
+
+    <form action="/comment" method="post">
+        <label for="title">Title</label>
+        <input type="text" name="title" id="title">
+        <label for="content">Content</label>
+        <textarea name="content" id="content" cols="30" rows="10"></textarea>
+        <button type="submit">Comment</button>
+    </form>
+
+    <h2>Comments</h2>
+
+    <ul class="commentflow">
+        {% for row in comments %}
+        <li class="comment">
+            <p>{{ row.username }}</p>
+            <p>{{ row.content }}</p>
+        </li>
+        {% endfor %}
+    </ul>
+    
+{% endblock %}
