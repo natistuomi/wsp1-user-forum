@@ -1,4 +1,16 @@
 {% extends "layout.njk" %}
 {% block content %}
-    <h1>{{ title }}</h1>
+    <ul>
+    {% for row in rows %}
+        <a href="/post/{{ row.id }}">
+            <li class="post">
+                <h1>{{ row.title }}</h1>
+                <p>Author: {{ row.username }}</p>
+                <p>Tid: {{ row.createdAt  }}</p>
+                <p>Meddelande: {{ row.content  }}</p>
+                <p>{{ row.id }}</p>
+            </li>
+        </a>
+    {% endfor %}
+  </ul>
 {% endblock %}
