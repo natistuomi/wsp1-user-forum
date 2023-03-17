@@ -99,15 +99,21 @@ router.post('/login', async function (req, res, next) {
 router.post('/register', async function(req, res, next){
     const { username, password, passwordConfirmation, } = req.body;
 
-    if (username.length === 0) {
-        res.json('Username is Required')
+    if(username.length === 0) {
+        res.json('Username is required');
     }
-    else if (password.length === 0) {
-        res.json('Password is Required')
+    else if(password.length === 0) {
+        res.json('Password is required');
     }
-    else if (passwordConfirmation !== password){
-        res.json('Passwords do not match')
+    else if(passwordConfirmation !== password){
+        res.json('Passwords do not match');
     } 
+    else if(password === username){
+        res.json('Username and password can not be identical');
+    }
+    else if(password.length < 6){
+        res.json('Password must be at least 6 characters');
+    }
     else {
         const [user, query] = await promisePool.query('SELECT username FROM nt19logins WHERE username = ?', [username]);
         if(user.length > 0 ){
@@ -115,7 +121,7 @@ router.post('/register', async function(req, res, next){
         }
         else{
             bcrypt.hash (password, 10, async function(err, hash){
-                await promisePool.query('INSERT INTO nt19logins (name, password) VALUES (?, ?)', [username,hash]);
+                await promisePool.query('INSERT INTO nt19logins (username, password) VALUES (?, ?)', [username,hash]);
                 res.redirect('/login');
             });                
         }
