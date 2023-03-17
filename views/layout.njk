@@ -3,10 +3,14 @@
     <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <title>User-forum</title>
+        <title>{{ title }}</title>
     </head>
     <body>
-        {% block content %}
-        {% endblock %}
+        {% include "navigation.njk" %}
+        <main>
+            {% block  content %}
+            {% endblock %}
+        </main>
+        {% include "footer.njk" %}
     </body>
 </html>
