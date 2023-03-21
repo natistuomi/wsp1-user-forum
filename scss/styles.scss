@@ -16,6 +16,9 @@
 body{
     background-color: var(--color-dark);
     color: var(--color-cream);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     a{
         color: var(--color-cream);
         text-decoration: none;
@@ -25,15 +28,20 @@ body{
 header{
     background-color: var(--color-light);
     color: var(--color-black);
+    width: 100%;
+    padding: .5rem 1rem;
     a{
         color: var(--color-black);
     }
-    
 }
 
 nav{
     background-color: var(--color-cream);
     color: var(--color-black);
+    width: 100%;
+    padding: .5rem 1rem;
+    display: flex;
+    justify-content: space-between;
     a{
         color: var(--color-black);
     }
@@ -42,13 +50,40 @@ nav{
 main{
     background-color: var(--color-light);
     color: var(--color-black);
+    width: min(100ch, 100vw - 2rem);
+    padding: 1rem;
+    margin: 1rem;
     a{
         color: var(--color-black);
     }
     ul{
-        padding: 0;
+        padding-left: 0;
+        margin: 0;
         li{
             list-style: none;
         }
     }
+    .login{
+        padding: 1rem;
+        display: flex;
+        flex-direction: column;
+    }
+}
+
+input{
+    margin-bottom: .5rem;
+    padding: .5rem;
+    background-color: var(--color-cream);
+}
+
+input:focus{
+    border: 3px solid #555;
+}
+
+footer{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding-top: 2rem;
 }
