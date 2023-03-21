@@ -53,6 +53,7 @@ router.get('/post/:id', async function (req, res, next){
     res.render('post.njk', { 
         post: post[0][0], 
         title: 'Post',
+        postId: postId,
         comments: comments[0]
     }); 
 });
@@ -77,12 +78,13 @@ router.post('/login', async function (req, res, next) {
         if(rowsname.length > 0 ){
             const [rows, query] = await promisePool.query('SELECT password FROM nt19logins WHERE username = ?', [username]);
             const bcryptPassword = rows[0].password
-
+            const userId = await promisePool.query("SELECT nt19logins.id FROM nt19logins WHERE username = ?", [username]);
             bcrypt.compare(password, bcryptPassword , function(err, result) {
                 console.assert(result,'Invalid username or password')
                 if(result){
                     req.session.loggedin = true;
                     req.session.username = username;
+                    req.session.userId = userId[0][0].id;
                     res.redirect('/profile');
                 }
                 else{ 
@@ -130,10 +132,10 @@ router.post('/register', async function(req, res, next){
 
 router.post('/new', async function (req, res, next) {
     const { title, content } = req.body;
+    const authorId = req.session.userId;
     if(req.session.loggedin){
-        const authorId = await promisePool.query("SELECT nt19logins.id FROM nt19logins WHERE username = ?", [req.session.username]);
         const [rows] = await promisePool.query('INSERT INTO nt19posts (authorId, title, content) VALUES (?, ?, ?)', [authorId, title, content]);
-        res.send(rows)
+        res.redirect('/');
     }
     else{
         res.redirect('/login');
@@ -152,9 +154,8 @@ router.post('/logout', async function(req, res, next){
 
 router.post('/deleteUser', async function(req, res, next){
     if(req.session.loggedin){
-        const authorId = await promisePool.query("SELECT nt19logins.id FROM nt19logins WHERE username = ?", [req.session.username]);
-        await promisePool.query('DELETE FROM nt19commentary WHERE authorId = ?', [authorId]);
-        await promisePool.query('DELETE FROM nt19posts WHERE authorId = ?', [authorId]);
+        await promisePool.query('DELETE FROM nt19commentary WHERE authorId = ?', [req.session.userId]);
+        await promisePool.query('DELETE FROM nt19posts WHERE authorId = ?', [req.session.userId]);
         await promisePool.query('DELETE FROM nt19logins WHERE username = ?', [req.session.username]);
         req.session.destroy();
         res.redirect('/')
@@ -165,11 +166,11 @@ router.post('/deleteUser', async function(req, res, next){
 });
 
 router.post('/comment', async function (req, res, next) {
-    const { content } = req.body;
+    const { postId, content } = req.body;
+    const authorId = req.session.userId;
     if(req.session.loggedin){
-        const authorId = await promisePool.query("SELECT nt19logins.id FROM nt19logins WHERE username = ?", [req.session.username]);
-        const [rows] = await promisePool.query('INSERT INTO nt19commentary (authorId, content) VALUES (?, ?)', [authorId, content]);
-        res.send(rows);
+        const [rows] = await promisePool.query('INSERT INTO nt19commentary (authorId, postId, content) VALUES (?, ?, ?)', [authorId, postId, content]);
+        res.redirect('/');
     }
     else{
         res.redirect('/login');

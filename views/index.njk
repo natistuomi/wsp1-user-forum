@@ -5,10 +5,9 @@
         <a href="/post/{{ row.id }}">
             <li class="post">
                 <h1>{{ row.title }}</h1>
-                <p>Author: {{ row.username }}</p>
+                <p>Author: {{ row.author }}</p>
                 <p>Tid: {{ row.createdAt  }}</p>
                 <p>Meddelande: {{ row.content  }}</p>
-                <p>{{ row.id }}</p>
             </li>
         </a>
     {% endfor %}

@@ -6,13 +6,13 @@
             <p>Author: {{ post.username }}</p>
             <p>Published: {{ post.createdAt  }}</p>
             <p>Content: {{ post.content  }}</p>
-            <p>{{ post.id }}</p>
         </li>
     </ul>
 
     <br>
 
     <form action="/comment" method="post">
+        <input type="hidden" name="postId" value="{{ postId }}">
         <label for="content">Content</label>
         <textarea name="content" id="content" cols="30" rows="10"></textarea>
         <button type="submit">Comment</button>
