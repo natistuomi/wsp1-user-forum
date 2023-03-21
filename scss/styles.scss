@@ -5,6 +5,50 @@
     src: url("/fonts/MerriweatherSans-VariableFont_wght.ttf");
 }
 
-html{
-    background-color: blue;
+:root {
+    --color-black: #0D1321;
+    --color-dark: #1d2d44;
+    --color-middle: #3e5c76;
+    --color-light: #748cab;
+    --color-cream: #f0ebd8;
+}
+
+body{
+    background-color: var(--color-dark);
+    color: var(--color-cream);
+    a{
+        color: var(--color-cream);
+        text-decoration: none;
+    }
+}
+
+header{
+    background-color: var(--color-light);
+    color: var(--color-black);
+    a{
+        color: var(--color-black);
+    }
+    
+}
+
+nav{
+    background-color: var(--color-cream);
+    color: var(--color-black);
+    a{
+        color: var(--color-black);
+    }
+}
+
+main{
+    background-color: var(--color-light);
+    color: var(--color-black);
+    a{
+        color: var(--color-black);
+    }
+    ul{
+        padding: 0;
+        li{
+            list-style: none;
+        }
+    }
 }

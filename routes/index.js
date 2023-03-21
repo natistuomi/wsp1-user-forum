@@ -13,32 +13,37 @@ router.get('/', async function (req, res, next) {
     const [rows] = await promisePool.query("SELECT nt19posts.*, nt19logins.username AS author FROM nt19posts JOIN nt19logins on nt19posts.authorId = nt19logins.id ORDER BY id DESC");
     res.render('index.njk', { 
         title: 'Homepage',
-        rows: rows
+        rows: rows,
+        loggedIn: req.session.userId||0
     });
 });
 
 router.get('/login', function (req, res, next) {
     res.render('login.njk', {
-        title: 'Login'
+        title: 'Login',
+        loggedIn: req.session.userId||0
     });
 });
 
 router.get('/register', function (req, res, next){
     res.render('register.njk', {
-        title: 'Register'
+        title: 'Register',
+        loggedIn: req.session.userId||0
     });
 });
 
 router.get('/new', async function (req, res, next){
     res.render('new.njk', {
-        title: 'New post'
+        title: 'New post',
+        loggedIn: req.session.userId||0
     });
 });
 
 router.get('/profile', function (req, res, next){
     if(req.session.loggedin){
         res.render('profile.njk', { 
-            username: req.session.username
+            username: req.session.username,
+            loggedIn: req.session.userId||0
         });
     }
     else{
@@ -54,7 +59,8 @@ router.get('/post/:id', async function (req, res, next){
         post: post[0][0], 
         title: 'Post',
         postId: postId,
-        comments: comments[0]
+        comments: comments[0],
+        loggedIn: req.session.userId||0
     }); 
 });
 
