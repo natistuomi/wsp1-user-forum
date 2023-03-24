@@ -134,63 +134,71 @@ body a {
   color: var(--color-cream);
   text-decoration: none;
 }
-
-header {
+body header {
   background-color: var(--color-light);
   color: var(--color-black);
-  width: 100%;
+  width: min(100ch, 100vw - 2rem);
   padding: 0.5rem 1rem;
 }
-header a {
+body header a {
   color: var(--color-black);
 }
-
-nav {
+body nav {
   background-color: var(--color-cream);
   color: var(--color-black);
-  width: 100%;
+  width: min(100ch, 100vw - 2rem);
   padding: 0.5rem 1rem;
   display: flex;
   justify-content: space-between;
 }
-nav a {
+body nav a {
   color: var(--color-black);
 }
-
-main {
+body main {
   background-color: var(--color-light);
   color: var(--color-black);
   width: min(100ch, 100vw - 2rem);
   padding: 1rem;
   margin: 1rem;
 }
-main a {
+body main a {
   color: var(--color-black);
 }
-main ul {
+body main ul {
   padding-left: 0;
   margin: 0;
 }
-main ul li {
+body main ul li {
   list-style: none;
 }
-main .login {
+body main .login, body main .register, body main .new {
   padding: 1rem;
   display: flex;
   flex-direction: column;
 }
-
-input {
+body main .login .buttons, body main .register .buttons, body main .new .buttons {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+body main .login .buttons button, body main .register .buttons button, body main .new .buttons button {
+  margin-right: 0.5rem;
+}
+body main input, body main textarea {
   margin-bottom: 0.5rem;
   padding: 0.5rem;
   background-color: var(--color-cream);
 }
-
-input:focus {
+body main input:focus {
   border: 3px solid #555;
 }
-
-footer {
+body main button {
+  margin-top: 0.5rem;
+  padding: 0.5rem;
+  background-color: var(--color-black);
+  color: var(--color-cream);
+}
+body footer {
   display: flex;
   flex-direction: column;
   align-items: center;
