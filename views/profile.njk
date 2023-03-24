@@ -12,4 +12,18 @@
     <button type="submit">Delete user</button>
     </form>
 
+    <h2>Your posts</h2>
+    <ul>
+    {% for row in rows %}
+        <a href="/post/{{ row.id }}">
+            <li class="post">
+                <h3>{{ row.title }}</h3>
+                <p>Author: {{ row.author }}</p>
+                <p>Time: {{ row.createdAt  }}</p>
+                <p>{{ row.content  }}</p>
+            </li>
+        </a>
+    {% endfor %}
+  </ul>
+
 {% endblock %}

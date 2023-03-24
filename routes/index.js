@@ -37,11 +37,13 @@ router.get('/new', async function (req, res, next){
     });
 });
 
-router.get('/profile', function (req, res, next){
+router.get('/profile', async function (req, res, next){
+    const [rows] = await promisePool.query("SELECT nt19posts.*, nt19logins.username AS author FROM nt19posts JOIN nt19logins on nt19posts.authorId = nt19logins.id  WHERE nt19posts.authorId = ? ORDER BY id DESC", [req.session.userId]);
     if(req.session.loggedin){
         res.render('profile.njk', { 
             username: req.session.username,
-            loggedIn: req.session.userId||0
+            loggedIn: req.session.userId||0,
+            rows: rows
         });
     }
     else{

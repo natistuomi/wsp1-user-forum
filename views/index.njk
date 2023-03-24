@@ -4,10 +4,10 @@
     {% for row in rows %}
         <a href="/post/{{ row.id }}">
             <li class="post">
-                <h1>{{ row.title }}</h1>
+                <h2>{{ row.title }}</h2>
                 <p>Author: {{ row.author }}</p>
-                <p>Tid: {{ row.createdAt  }}</p>
-                <p>Meddelande: {{ row.content  }}</p>
+                <p>Time: {{ row.createdAt  }}</p>
+                <p>{{ row.content  }}</p>
             </li>
         </a>
     {% endfor %}
