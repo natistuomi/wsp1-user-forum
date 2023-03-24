@@ -7,6 +7,8 @@ const { render } = require('nunjucks');
 const validator = require('validator');
 const promisePool = pool.promise();
 
+let errors = [];
+
 router.get('/', async function (req, res, next) {
     const [rows] = await promisePool.query("SELECT nt19posts.*, nt19logins.username AS author FROM nt19posts JOIN nt19logins on nt19posts.authorId = nt19logins.id ORDER BY id DESC");
     res.render('index.njk', { 
@@ -19,7 +21,7 @@ router.get('/', async function (req, res, next) {
 router.get('/login', function (req, res, next) {
     res.render('login.njk', {
         title: 'Login',
-        loggedIn: req.session.userId||0
+        loggedIn: req.session.userId||0,
     });
 });
 
@@ -70,23 +72,30 @@ router.get('/bcrypt/:pwd', function (req, res ,next){
     });
 });
 
+
+
+
+
+
+
+
+
+
 router.post('/login', async function (req, res, next) {
     const { username, password } = req.body;
-
-    if (username.length === 0){
-        res.json('Username is Required')
+    if(username.length === 0){
+        errors.push('Username is Required')
     }
-    else if (password.length === 0){
-        res.json('Password is Required')
+    if(password.length === 0){
+        errors.push('Password is Required')
     }
-    else{
+    if(errors.length === 0){
         const [rowsname, query] = await promisePool.query('SELECT username FROM nt19logins WHERE username = ?', [username]);
         if(rowsname.length > 0 ){
             const [rows, query] = await promisePool.query('SELECT password FROM nt19logins WHERE username = ?', [username]);
             const bcryptPassword = rows[0].password
             const userId = await promisePool.query("SELECT nt19logins.id FROM nt19logins WHERE username = ?", [username]);
             bcrypt.compare(password, bcryptPassword , function(err, result) {
-                console.assert(result,'Invalid username or password')
                 if(result){
                     req.session.loggedin = true;
                     req.session.username = username;
@@ -94,15 +103,35 @@ router.post('/login', async function (req, res, next) {
                     res.redirect('/profile');
                 }
                 else{ 
-                    res.json('Invalid username or password')
+                    errors.push('Invalid username or password')
                 }
             });
         }
         else{
-            res.json('Invalid username or password');
+            errors.push('Invalid username or password');
         }
     }
+    console.log(errors);
+    res.render('login.njk', {
+        title: 'Login',
+        loggedIn: req.session.userId||0,
+        errors: errors
+    })
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 router.post('/register', async function(req, res, next){
     const { username, password, passwordConfirmation, } = req.body;

@@ -59,6 +59,9 @@ body{
                 list-style: none;
             }
         }
+        .errorfield{
+            color: darkred;
+        }
         .login, .register, .new, .comments{
             display: flex;
             flex-direction: column;

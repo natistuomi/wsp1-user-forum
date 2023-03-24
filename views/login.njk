@@ -1,6 +1,14 @@
 {% extends "layout.njk" %}
 {% block  content %}
 
+<ul class="errorfield">
+    {% for row in errors %}
+    <li class="error">
+        <p>{{ row }}</p>
+    </li>
+    {% endfor %}
+</ul>
+
 <form action="/login" method="POST" class="login">
     <label for="username">Username</label>
     <input type="text" name="username" id="username">
