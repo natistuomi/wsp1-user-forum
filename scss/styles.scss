@@ -59,8 +59,7 @@ body{
                 list-style: none;
             }
         }
-        .login, .register, .new{
-            padding: 1rem;
+        .login, .register, .new, .comments{
             display: flex;
             flex-direction: column;
             .buttons{

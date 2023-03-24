@@ -171,17 +171,16 @@ body main ul {
 body main ul li {
   list-style: none;
 }
-body main .login, body main .register, body main .new {
-  padding: 1rem;
+body main .login, body main .register, body main .new, body main .comments {
   display: flex;
   flex-direction: column;
 }
-body main .login .buttons, body main .register .buttons, body main .new .buttons {
+body main .login .buttons, body main .register .buttons, body main .new .buttons, body main .comments .buttons {
   display: flex;
   align-items: center;
   justify-content: center;
 }
-body main .login .buttons button, body main .register .buttons button, body main .new .buttons button {
+body main .login .buttons button, body main .register .buttons button, body main .new .buttons button, body main .comments .buttons button {
   margin-right: 0.5rem;
 }
 body main input, body main textarea {
