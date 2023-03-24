@@ -4,10 +4,8 @@ const router = express.Router();
 const pool = require('../utils/database');
 const session = require('express-session');
 const { render } = require('nunjucks');
-
+const validator = require('validator');
 const promisePool = pool.promise();
-
-
 
 router.get('/', async function (req, res, next) {
     const [rows] = await promisePool.query("SELECT nt19posts.*, nt19logins.username AS author FROM nt19posts JOIN nt19logins on nt19posts.authorId = nt19logins.id ORDER BY id DESC");
@@ -106,21 +104,17 @@ router.post('/login', async function (req, res, next) {
 
 router.post('/register', async function(req, res, next){
     const { username, password, passwordConfirmation, } = req.body;
-
-    if(username.length === 0) {
-        res.json('Username is required');
+    if(username.length < 6) {
+        res.json('Username must be at least 6 characters');
     }
-    else if(password.length === 0) {
-        res.json('Password is required');
+    else if(password.length < 8){
+        res.json('Password must be at least 8 characters');
     }
     else if(passwordConfirmation !== password){
         res.json('Passwords do not match');
     } 
     else if(password === username){
         res.json('Username and password can not be identical');
-    }
-    else if(password.length < 6){
-        res.json('Password must be at least 6 characters');
     }
     else {
         const [user, query] = await promisePool.query('SELECT username FROM nt19logins WHERE username = ?', [username]);
@@ -139,12 +133,28 @@ router.post('/register', async function(req, res, next){
 router.post('/new', async function (req, res, next) {
     const { title, content } = req.body;
     const authorId = req.session.userId;
-    if(req.session.loggedin){
-        const [rows] = await promisePool.query('INSERT INTO nt19posts (authorId, title, content) VALUES (?, ?, ?)', [authorId, title, content]);
-        res.redirect('/');
+    if(title.length < 3){
+        res.json('Title must be at least 3 characters');
+    }
+    else if(content.length < 10){
+        res.json('Content must be at least 10 characters');
     }
     else{
-        res.redirect('/login');
+        if(req.session.loggedin){
+            const sanitize = (str) => {
+                let temp = str.trim();
+                temp = validator.stripLow(temp);
+                temp = validator.escape(temp);
+                return temp;
+            };
+            const sanitizedTitle = sanitize(title);
+            const sanitizedContent = sanitize(content);
+            const [rows] = await promisePool.query('INSERT INTO nt19posts (authorId, title, content) VALUES (?, ?, ?)', [authorId, sanitizedTitle, sanitizedContent]);
+            res.redirect('/');
+        }
+        else{
+            res.redirect('/login');
+        }
     }
 });
 
@@ -175,7 +185,14 @@ router.post('/comment', async function (req, res, next) {
     const { postId, content } = req.body;
     const authorId = req.session.userId;
     if(req.session.loggedin){
-        const [rows] = await promisePool.query('INSERT INTO nt19commentary (authorId, postId, content) VALUES (?, ?, ?)', [authorId, postId, content]);
+        const sanitize = (str) => {
+            let temp = str.trim();
+            temp = validator.stripLow(temp);
+            temp = validator.escape(temp);
+            return temp;
+        };
+        const sanitizedContent = sanitize(content);
+        const [rows] = await promisePool.query('INSERT INTO nt19commentary (authorId, postId, content) VALUES (?, ?, ?)', [authorId, postId, sanitizedContent]);
         res.redirect('/');
     }
     else{
