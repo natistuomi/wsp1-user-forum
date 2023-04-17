@@ -85,7 +85,7 @@ router.post('/login', async function (req, res, next) {
         res.json('Username is Required');
     }
     else if(password.length === 0){
-        req.json('Password is Required');
+        res.json('Password is Required');
     }
     else{
         const [rowsname, query] = await promisePool.query('SELECT username FROM nt19logins WHERE username = ?', [username]);
@@ -101,20 +101,14 @@ router.post('/login', async function (req, res, next) {
                     res.redirect('/profile');
                 }
                 else{ 
-                    req.json('Invalid username or password');
+                    res.json('Invalid username or password');
                 }
             });
         }
         else{
-            req.json('Invalid username or password');
+            res.json('Invalid username or password');
         }
     }
-    console.log(errors);
-    res.render('login.njk', {
-        title: 'Login',
-        loggedIn: req.session.userId||0,
-        errors: errors
-    })
 });
 
 
