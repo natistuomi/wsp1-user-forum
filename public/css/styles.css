@@ -171,9 +171,6 @@ body main ul {
 body main ul li {
   list-style: none;
 }
-body main .errorfield {
-  color: darkred;
-}
 body main .login, body main .register, body main .new, body main .comments {
   display: flex;
   flex-direction: column;

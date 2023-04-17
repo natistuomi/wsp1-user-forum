@@ -7,8 +7,6 @@ const { render } = require('nunjucks');
 const validator = require('validator');
 const promisePool = pool.promise();
 
-let errors = [];
-
 router.get('/', async function (req, res, next) {
     const [rows] = await promisePool.query("SELECT nt19posts.*, nt19logins.username AS author FROM nt19posts JOIN nt19logins on nt19posts.authorId = nt19logins.id ORDER BY id DESC");
     res.render('index.njk', { 
@@ -21,7 +19,7 @@ router.get('/', async function (req, res, next) {
 router.get('/login', function (req, res, next) {
     res.render('login.njk', {
         title: 'Login',
-        loggedIn: req.session.userId||0,
+        loggedIn: req.session.userId||0
     });
 });
 
@@ -84,12 +82,12 @@ router.get('/bcrypt/:pwd', function (req, res ,next){
 router.post('/login', async function (req, res, next) {
     const { username, password } = req.body;
     if(username.length === 0){
-        errors.push('Username is Required')
+        res.json('Username is Required');
     }
-    if(password.length === 0){
-        errors.push('Password is Required')
+    else if(password.length === 0){
+        req.json('Password is Required');
     }
-    if(errors.length === 0){
+    else{
         const [rowsname, query] = await promisePool.query('SELECT username FROM nt19logins WHERE username = ?', [username]);
         if(rowsname.length > 0 ){
             const [rows, query] = await promisePool.query('SELECT password FROM nt19logins WHERE username = ?', [username]);
@@ -103,12 +101,12 @@ router.post('/login', async function (req, res, next) {
                     res.redirect('/profile');
                 }
                 else{ 
-                    errors.push('Invalid username or password')
+                    req.json('Invalid username or password');
                 }
             });
         }
         else{
-            errors.push('Invalid username or password');
+            req.json('Invalid username or password');
         }
     }
     console.log(errors);
