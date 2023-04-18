@@ -197,6 +197,9 @@ body main button {
   background-color: var(--color-black);
   color: var(--color-cream);
 }
+body main .post, body main .comment {
+  padding: 1rem 0;
+}
 body footer {
   display: flex;
   flex-direction: column;

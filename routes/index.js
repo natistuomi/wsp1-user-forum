@@ -60,7 +60,8 @@ router.get('/post/:id', async function (req, res, next){
         title: 'Post',
         postId: postId,
         comments: comments[0],
-        loggedIn: req.session.userId||0
+        loggedIn: req.session.userId||0,
+        username: req.session.username
     }); 
 });
 
@@ -197,10 +198,10 @@ router.post('/deleteUser', async function(req, res, next){
         await promisePool.query('DELETE FROM nt19posts WHERE authorId = ?', [req.session.userId]);
         await promisePool.query('DELETE FROM nt19logins WHERE username = ?', [req.session.username]);
         req.session.destroy();
-        res.redirect('/')
+        res.redirect('/');
     }
     else{
-        res.status(401).json('Access denied')
+        res.status(401).json('Access denied');
     }
 });
 

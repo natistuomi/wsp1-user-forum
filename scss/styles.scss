@@ -85,6 +85,9 @@ body{
             background-color: var(--color-black);
             color: var(--color-cream);
         }
+        .post, .comment{
+            padding: 1rem 0;
+        }
     }
     footer{
         display: flex;
@@ -94,6 +97,3 @@ body{
         padding: 2rem 1rem;
     }
 }
-
-
-

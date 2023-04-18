@@ -23,7 +23,7 @@
     <ul class="commentflow">
         {% for row in comments %}
         <li class="comment">
-            <p>{{ row.username }}</p>
+            <p><b>{{ row.author }}</b></p>
             <p>{{ row.content }}</p>
         </li>
         {% endfor %}
